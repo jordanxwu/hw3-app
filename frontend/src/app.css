@@ -1,0 +1,202 @@
+
+  /* CSS styling */
+  @font-face{
+    /* learned to import fonts similar to New York times */
+    /* source: https://www.w3schools.com/css/css3_fonts.asp */
+    font-family:'logoFont';
+    src:url('./assets/EnglishTowne.ttf');
+}
+
+@font-face{
+    /* font to match the font NYT uses for it's articles */
+    font-family: "ArticleContent";
+    src: url('./assets/CheltenhamStdLight.otf')
+}
+
+@font-face{
+    /* font for article names/headers */
+    font-family: "ArticleTitle";
+    src: url('./assets/CheltenhamStdBold.otf')
+}
+
+body{
+    /* setting article font */
+    font-family: 'ArticleContent';
+    margin: 0;
+    padding: 0;
+}
+
+header{
+    /* ensuring the title is in the middle and adds a border below it */ 
+    text-align: center;
+    padding-bottom: 0px;
+    border-bottom: thick double black;
+}
+
+header h1{
+    /* styling for the title: The New York Times*/
+    font-family: 'logoFont';
+    font-size: 375%;
+    margin: 10px;
+}
+
+.navbar {
+    /* ensures navigation bar is in center */
+    display: flex;
+    justify-content: center;
+}
+
+.navbar a {
+    /* styling for the text for the navigation bar */ 
+    color: black;
+    padding: 12px 16px;
+    font-size: 14px;
+    text-decoration: none;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.navbar a:hover {
+     /* if hovered over -> turns light grey */
+    background-color: rgb(232, 227, 227);
+    text-decoration: underline;
+}
+
+.date-container {
+    /* date align with the article start on the left */
+    max-width: 1400px;
+    padding: 0 20px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+a{
+    /* for links */
+    text-decoration: none;
+    color: black;
+}
+
+.headline {
+    /* for headline links */
+    text-decoration: none;
+    color: black;
+  }
+  
+  .headline:hover {
+    /* changes color as you hover to let user know they can click */
+    color: rgb(115, 115, 119);
+  }
+  
+
+h2{
+    /* styling for other article titles */
+    font-family: "ArticleTitle";
+    font-size: 120%;
+    text-decoration: none;
+}
+
+.columns-container{
+    /* enables a flex layout */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: flex-start;
+
+}
+
+
+.column{
+    /* styling for columns */
+    /* box sizing to create a cleaner look. source: https://www.w3schools.com/css/css3_box-sizing.asp */
+    padding: 0px 20px 20px 20px;
+    box-sizing: border-box;
+    flex: 1 1 32%;
+    min-width: 300px;
+}
+
+.column:not(:last-child){ 
+    /* add vertical seperator for columns and articles */ 
+    border-right: 1px solid rgb(170, 167, 167);
+}
+
+.column article{ 
+    /* add border before starting new article and creates space */
+    border-top: 1px solid rgb(170, 167, 167);
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.column article:first-child{
+    /* no top border if it's the first article of a column */
+    border-top: none;
+    margin-top: 0px;
+}
+
+img{ 
+    /* image is set max to fit the container */
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+footer{
+    /* footer has a border at top for seperation, and text aligned to the middle */
+    border-top: 2px solid black;
+    margin-top: 10px;
+    font-size: medium;
+    text-align: center;
+}
+
+
+/* MEDIA QUERIES */
+
+/* COMPUTER VIEW */
+@media(min-width: 1024px){ 
+    /* media query for 3 columns (computer view) */
+    .column{
+        flex: 1 1 32%;
+    }
+}
+
+/* TABLET VIEW */
+@media(min-width: 768px) and (max-width: 1024px){
+    /* media query for 2 columns (tablet view) */
+    .column{
+        flex: 1 1 45%;
+        max-width: 48%;
+    }
+    main{
+        /* ensuring third column is aligned*/
+        justify-content: flex-start;
+    }
+    .column:nth-child(2){
+        /* removing border from a two column view */
+        border-right: none
+    }
+    .column:last-child{
+        /* adds border to last column when in tablet view*/
+        border-right: 1px solid rgb(170, 167, 167);
+    }
+}
+
+/* MOBILE VIEW */
+@media(max-width: 768px){
+    /* media query for 1 column (mobile view) */ 
+    /* remove borders because we have a 1 column view */
+    .column{
+        flex: 1 1 100%;
+    }
+    .column:first-child{
+        border-right: none;
+    }
+    .column:nth-child(2){
+        border-right: none;
+    }
+    .column:last-child{
+        border-right: none;
+    }
+    
+}
