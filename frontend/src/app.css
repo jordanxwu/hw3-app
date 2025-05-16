@@ -200,3 +200,14 @@ footer{
     }
     
 }
+/* BUTTON STYLING */
+    .comment-button {
+    background-color: #5e6061;
+    color: white;
+    border: none;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 4px;
+  }
+
+  

@@ -1,11 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import Comments from './comments.svelte';
 
   let apiKey: string = '';
   let articles: any[] = [];
+  let showComments = false;
+  let currentArticleId = '';
 
   // template from slides
-
   const BASE_URL = 'https://api.nytimes.com/svc/search/v2/articlesearch.json';
 
   function makeRequest(query: string, apiKey: string) {
@@ -22,6 +24,13 @@
     console.log("NYT response: ", nytData);
     if (nytData.status === "OK" && nytData.response?.docs) {
       articles = nytData.response.docs;
+      // creating article ID for comments
+      articles = articles.map(article => {
+        return {
+          ...article,
+          articleId: article._id.replace(/\//g, '-') 
+        };
+      });
     } else {
       console.error("Nyt response incorrect", nytData);
     }
@@ -73,7 +82,15 @@
     }
   }
 
+  // COMMENTING FUNCTIONS
+  function openComments(articleId: string) {
+    currentArticleId = articleId;
+    showComments = true;
+  }
 
+  function handleCloseComments() {
+    showComments = false;
+  }
 </script>
 
 <main>
@@ -93,27 +110,25 @@
     <!-- CURRENT DAY -->
     <div class="date-container">
       <p id="date"></p>
-  </div>
-
+    </div>
   </header>
 
-<!-- JAVASCRIPT: used this source and previous knowledge of JS: https://www.w3schools.com/js/js_date_methods.asp-->
-<!-- prints out the current date and weekday-->
-<script>
-  let date =  new Date();
-  let year = date.getFullYear();
-  const months = ["January", "February", "March", "April", "May", "June",
-          "July", "August", "September", "October", "November", "December"];
-  let month = months[date.getMonth()];
-  let day = date.getDate();
-  const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  let dayofweek = weekdays[date.getDay()];
+  <!-- JAVASCRIPT: used this source and previous knowledge of JS: https://www.w3schools.com/js/js_date_methods.asp-->
+  <!-- prints out the current date and weekday-->
+  <script>
+    let date = new Date();
+    let year = date.getFullYear();
+    const months = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
+    let month = months[date.getMonth()];
+    let day = date.getDate();
+    const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    let dayofweek = weekdays[date.getDay()];
 
-  document.getElementById("date").innerHTML = dayofweek + " - " + month + " " + day + " " + year;  
-</script>
+    document.getElementById("date").innerHTML = dayofweek + " - " + month + " " + day + " " + year;  
+  </script>
 
   <div class="columns-container">
-
     <div class="column">
       <!-- COLUMN 1 - top of hierarchy -->
       <article>
@@ -128,9 +143,12 @@
           <img src={getImageURL(articles[0])} alt="Faculty on Strike"/>
         </a>
 
-        <p>{articles[0]?.abstract}
+        <p>{articles[0]?.abstract}</p>
         <p>{articles[0]?.byline?.original}</p>
         <p>{formatDate(articles[0]?.pub_date)}</p>
+        {#if articles[0]}
+          <button class="comment-button" on:click={() => openComments(articles[0].articleId)}>💬 Comments</button>
+        {/if}
       </article>
 
       <article>
@@ -144,10 +162,12 @@
           </a>
         </h2>
 
-        
         <p>{articles[1]?.abstract}</p>
         <p>{articles[1]?.byline?.original}</p>
         <p>{formatDate(articles[1]?.pub_date)}</p>
+        {#if articles[1]}
+          <button class="comment-button" on:click={() => openComments(articles[1].articleId)}> 💬 Comments</button>
+        {/if}
       </article>
 
       <article>
@@ -155,7 +175,6 @@
           <img src={getImageURL(articles[3])} alt="article 3"/>
         </a>
         
-
         <h2>
           <a class="headline" href={articles[3]?.web_url} target="_blank">
             {articles[3]?.headline.main}
@@ -165,10 +184,12 @@
         <p>{articles[3]?.abstract}</p>
         <p>{articles[3]?.byline?.original}</p>
         <p>{formatDate(articles[3]?.pub_date)}</p>
+        {#if articles[3]}
+          <button class="comment-button" on:click={() => openComments(articles[3].articleId)}>💬 Comments</button>
+        {/if}
       </article>
-  </div>
+    </div>
   
-
     <div class="column">
       <!-- COLUMN 2 NEXT-->
       <article>
@@ -185,6 +206,9 @@
         <p>{articles[2]?.abstract}</p>
         <p>{articles[2]?.byline?.original}</p>
         <p>{formatDate(articles[2]?.pub_date)}</p>
+        {#if articles[2]}
+          <button class="comment-button" on:click={() => openComments(articles[2].articleId)}>💬 Comments</button>
+        {/if}
       </article>
 
       <article>
@@ -198,10 +222,12 @@
           </a>
         </h2>
 
-        
         <p>{articles[4]?.abstract}</p>
         <p>{articles[4]?.byline?.original}</p>
         <p>{formatDate(articles[4]?.pub_date)}</p>
+        {#if articles[4]}
+          <button class="comment-button" on:click={() => openComments(articles[4].articleId)}>💬 Comments</button>
+        {/if}
       </article>
 
       <article>
@@ -218,10 +244,11 @@
         <p>{articles[5]?.abstract}</p>
         <p>{articles[5]?.byline?.original}</p>
         <p>{formatDate(articles[5]?.pub_date)}</p>
+        {#if articles[5]}
+          <button class="comment-button" on:click={() => openComments(articles[5].articleId)}>💬 Comments</button>
+        {/if}
       </article>
-
-
-  </div>
+    </div>
 
     <div class="column">
       <!-- COLUMN 3-->
@@ -239,6 +266,9 @@
         <p>{articles[6]?.abstract}</p>
         <p>{articles[6]?.byline?.original}</p>
         <p>{formatDate(articles[6]?.pub_date)}</p>
+        {#if articles[6]}
+          <button class="comment-button" on:click={() => openComments(articles[6].articleId)}>💬 Comments</button>
+        {/if}
       </article>
 
       <article>
@@ -255,6 +285,9 @@
         <p>{articles[7]?.abstract}</p>
         <p>{articles[7]?.byline?.original}</p>
         <p>{formatDate(articles[7]?.pub_date)}</p>
+        {#if articles[7]}
+          <button class="comment-button" on:click={() => openComments(articles[7].articleId)}>💬 Comments</button>
+        {/if}
       </article>
 
       <article>
@@ -271,9 +304,19 @@
         <p>{articles[8]?.abstract}</p>
         <p>{articles[8]?.byline?.original}</p>
         <p>{formatDate(articles[8]?.pub_date)}</p>
+        {#if articles[8]}
+          <button class="comment-button" on:click={() => openComments(articles[8].articleId)}>💬 Comments</button>
+        {/if}
       </article>
     </div>
   </div>
+
+  <!-- use comments component -->
+  <Comments
+    articleId={currentArticleId}
+    isOpen={showComments}
+    on:close={handleCloseComments}
+  />
 </main>
 
 <footer>
