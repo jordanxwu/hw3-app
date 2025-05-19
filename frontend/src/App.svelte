@@ -6,6 +6,7 @@
   let articles: any[] = [];
   let showComments = false;
   let currentArticleId = '';
+  let comments: any[] = []; // Declare and initialize comments
 
   // template from slides
   const BASE_URL = 'https://api.nytimes.com/svc/search/v2/articlesearch.json';
@@ -91,6 +92,7 @@
   function handleCloseComments() {
     showComments = false;
   }
+
 </script>
 
 <main>

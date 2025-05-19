@@ -3,7 +3,7 @@ import os
 from flask_cors import CORS
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-
+# from authlib.integrations.flask_client import OAuth
 
 
 static_path = os.getenv('STATIC_PATH','static')
@@ -14,7 +14,14 @@ mongo = MongoClient(mongo_uri)
 db = mongo["mydatabase"]
 
 
-
+# oauth = OAuth(app)
+# oauth.register(
+#     name='dex',
+#     server_metadata_url='http://localhost:5556/.well-known/openid-configuration',
+#     client_id=os.getenv('OIDC_CLIENT_ID'),
+#     client_secret=os.getenv('OIDC_CLIENT_SECRET'),
+#     # client_kwargs={'scope': 'openid email profile groups'},
+# )
 
 app = Flask(__name__, static_folder=static_path, template_folder=template_path)
 CORS(app)
@@ -71,7 +78,14 @@ def get_comments(article_id):
     return jsonify(comments)
 
 
-
+#DELETE COMMENTS
+@app.route('/api/comments/<id>', methods=['DELETE'])
+def delete_comment(id):
+    # Option A: actually delete the document
+    result = db.comments.delete_one({"_id": ObjectId(id)})
+    if result.deleted_count == 0:
+        return jsonify({"error": "Not found"}), 404
+    return '', 204
 
 if __name__ == '__main__':
     debug_mode = os.getenv('FLASK_ENV') != 'production'

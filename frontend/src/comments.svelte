@@ -58,6 +58,18 @@
     }
   }
 
+  async function deleteComment(id: string) {
+    const res = await fetch(`/api/comments/${id}`, {
+      method: 'DELETE',
+    });
+    if (res.status === 204) {
+      // remove it from your local array
+      comments = comments.filter(c => c.id !== id);
+    } else {
+      console.error('Failed to delete comment', await res.text());
+    }
+  }
+
   function startReply(id: string) {
     replyTo = id;
     setTimeout(() => {
@@ -143,6 +155,7 @@
               </div>
               <div class="comment-footer">
                 <button class="reply-button" on:click={() => startReply(comment.id)}>Reply</button>
+                <button on:click={() => deleteComment(comment.id)}>Delete</button>
               </div>
               
               <!-- CREATE NESTED FOR REPLIES -->
